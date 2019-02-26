@@ -389,7 +389,7 @@ defmodule Chaperon.Session do
 
   @doc """
   Performs a HTTP GET request on `session`'s base_url and `path`.
-  Takes an optional list of options to be passed to `HTTPotion`.
+  Takes an optional list of options.
   """
   @spec get(Session.t(), String.t(), HTTP.options()) :: Session.t()
   def get(session, path, opts \\ []) do
@@ -399,7 +399,7 @@ defmodule Chaperon.Session do
 
   @doc """
   Performs a HTTP POST request on `session`'s base_url and `path`.
-  Takes an optional list of options to be passed to `HTTPotion`.
+  Takes an optional list of options.
   """
   @spec post(Session.t(), String.t(), HTTP.options()) :: Session.t()
   def post(session, path, opts \\ []) do
@@ -409,7 +409,7 @@ defmodule Chaperon.Session do
 
   @doc """
   Performs a HTTP PUT request on `session`'s base_url and `path`.
-  Takes an optional list of options to be passed to `HTTPotion`.
+  Takes an optional list of options.
   """
   @spec put(Session.t(), String.t(), HTTP.options()) :: Session.t()
   def put(session, path, opts \\ []) do
@@ -419,7 +419,7 @@ defmodule Chaperon.Session do
 
   @doc """
   Performs a HTTP PATCH request on `session`'s base_url and `path`.
-  Takes an optional list of options to be passed to `HTTPotion`.
+  Takes an optional list of options.
   """
   @spec patch(Session.t(), String.t(), HTTP.options()) :: Session.t()
   def patch(session, path, opts) do
@@ -429,7 +429,7 @@ defmodule Chaperon.Session do
 
   @doc """
   Performs a HTTP DELETE request on `session`'s base_url and `path`.
-  Takes an optional list of options to be passed to `HTTPotion`.
+  Takes an optional list of options.
   """
   @spec delete(Session.t(), String.t(), HTTP.options()) :: Session.t()
   def delete(session, path, opts \\ []) do
@@ -1336,27 +1336,11 @@ defmodule Chaperon.Session do
   Stores HTTP response cookies in `session` cookie store for further outgoing
   requests.
   """
-  @spec store_response_cookies(Session.t(), HTTPoison.Response.t()) :: Session.t()
-  def store_response_cookies(session, response = %HTTPoison.Response{}) do
+  @spec store_response_cookies(Session.t(), HTTP.Response.t()) :: Session.t()
+  def store_response_cookies(session, response = %HTTP.Response{}) do
     response
-    |> response_cookies()
-    |> strip_cookie_attributes()
+    |> HTTP.Response.cookies()
     |> store_cookies(session)
-  end
-
-  def response_cookies(response = %HTTPoison.Response{}) do
-    response.headers
-    |> Enum.filter(fn {key, _} -> String.match?(key, ~r/\Aset-cookie\z/i) end)
-    |> Enum.map(fn {_, value} -> value end)
-  end
-
-  # Strips attributes like Expires and HttpOnly from cookies. Only the name and
-  # value are allowed when sending cookies in requests.
-  defp strip_cookie_attributes(cookies) do
-    cookies
-    |> Enum.map(fn value ->
-      String.replace(value, ~r/;.*$/, "", global: false)
-    end)
   end
 
   defp store_cookies([], session) do
@@ -1554,7 +1538,7 @@ defmodule Chaperon.Session do
   defp decode_response(action, response) do
     response_body =
       case response do
-        %HTTPoison.Response{body: body} ->
+        %HTTP.Response{body: body} ->
           body
 
         s when is_binary(s) ->

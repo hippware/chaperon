@@ -14,7 +14,6 @@ defmodule Chaperon.Mixfile do
       dialyzer: [
         plt_add_deps: :apps_direct,
         plt_add_apps: [
-          :httpoison,
           :uuid,
           :poison,
           :histogrex
@@ -41,7 +40,6 @@ defmodule Chaperon.Mixfile do
     [
       applications: [
         :logger,
-        :httpoison,
         :uuid,
         :poison,
         :histogrex,
@@ -87,7 +85,6 @@ defmodule Chaperon.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:httpoison, "~> 0.11.1"},
       {:uuid, "~> 1.1"},
       {:poison, "~> 3.0"},
       {:histogrex, "~> 0.0.4"},
@@ -95,6 +92,8 @@ defmodule Chaperon.Mixfile do
       {:e_q, "~> 1.0.0"},
       {:instream, "~> 0.16.0"},
       {:deep_merge, "~> 0.1.1"},
+      {:castore, "~> 0.1.0"},
+      {:mint, "~> 0.1.0"},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.14", only: :dev},
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false}
