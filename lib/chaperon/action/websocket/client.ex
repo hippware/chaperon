@@ -32,7 +32,7 @@ defmodule Chaperon.Action.WebSocket.Client do
   end
 
   def handle_frame(msg, state) do
-    Logger.debug(fn -> "#{state.log_prefix} Received Frame" end)
+    Logger.debug(fn -> "#{state.log_prefix} Received Frame: #{inspect msg}" end)
 
     if EQ.empty?(state.awaiting_clients) do
       state = update_in(state.messages, &EQ.push(&1, msg))
